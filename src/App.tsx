@@ -3,10 +3,14 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import HomePage from './containers/Home/HomePage';
 
+import ErrorBoundary from './common/ErrorBoundary';
+
 const App: React.FC = () => {
   return (
     <Router>
-      <Route exact path="/" component={HomePage} />
+      <ErrorBoundary>
+        <Route exact path="/" component={HomePage} />
+      </ErrorBoundary>
     </Router>
   );
 };
