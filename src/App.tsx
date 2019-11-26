@@ -1,11 +1,13 @@
 import React from 'react';
-import './App.scss';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
+import HomePage from './containers/Home/HomePage';
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <h1>App entry</h1>
-    </div>
+    <Router>
+      <Route exact path="/" component={HomePage} />
+    </Router>
   );
 };
 
