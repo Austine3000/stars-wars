@@ -1,0 +1,38 @@
+#target {
+  background-color: #1c87c9;
+  color: #fff;
+}
+p {
+  padding: 40px 30px;
+  -moz-animation: marquee 5s linear infinite;
+  -webkit-animation: marquee 5s linear infinite;
+  animation: marquee 5s linear infinite;
+}
+@-moz-keyframes marquee {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(0, -100%);
+  }
+}
+@-webkit-keyframes marquee {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(0, -100%);
+  }
+}
+@keyframes marquee {
+  0% {
+    -moz-transform: translate(0, 0);
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
+  }
+  100% {
+    -moz-transform: translate(0, -100%);
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+  }
+}
