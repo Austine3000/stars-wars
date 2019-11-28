@@ -4,11 +4,11 @@ import { Table } from 'reactstrap';
 interface IProps {
   tHeaders: {
     name: string;
-    sort?: (isAsc: boolean) => React.MouseEventHandler<HTMLElement>;
+    // sort?: (isAsc: boolean) => React.MouseEventHandler<HTMLElement>;
     isSortable: boolean;
-    isAsc: boolean;
+    // isAsc: boolean;
   }[];
-  tData: {}[];
+  tData: any[];
 }
 
 interface IRowProps {
@@ -32,6 +32,13 @@ const TableRow: React.FC<IRowProps> = (props: IRowProps) => {
 };
 
 const TableWrapper: React.FC<IProps> = (props: IProps) => {
+  // const sort = (name: string) => {
+  //   character.sort(function(a, b) {
+  //     return a[name] - b[name];
+  //   });
+
+  //   setcharacter(character);
+  // };
   return (
     <React.Fragment>
       <Table>
@@ -43,9 +50,7 @@ const TableWrapper: React.FC<IProps> = (props: IProps) => {
                 {tHeader.isSortable ? (
                   <i
                     className="fas fa-sort"
-                    onClick={
-                      tHeader.sort ? tHeader.sort(tHeader.isAsc) : undefined
-                    }
+                    // onClick={() => sort(tHeader.name)}
                   ></i>
                 ) : (
                   ''
