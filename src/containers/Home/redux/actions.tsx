@@ -78,11 +78,17 @@ export const fetchCharacters = (id: string): any => async (
         const response = await axios.get(`${character}`);
         return {
           name: response.data.name,
-          gender: response.data.gender,
-          height:
-            Number(response.data.height) >= 0
-              ? Number(response.data.height)
-              : response.data.height
+          gender:
+            response.data.gender === 'male'
+              ? 'M'
+              : response.data.gender === 'female'
+              ? 'F'
+              : response.data.gender === 'hermaphrodite'
+              ? 'HERM'
+              : 'N/A',
+          height: Number.isNaN(Number(response.data.height))
+            ? response.data.height
+            : Number(response.data.height)
         };
       })
     );
@@ -91,9 +97,17 @@ export const fetchCharacters = (id: string): any => async (
     let gender = Array.from(new Set(result.map(x => x.gender)));
 
     gender = gender.map(element => {
+      const value =
+        element === 'M'
+          ? 'Male'
+          : element === 'F'
+          ? 'Female'
+          : element === 'HERM'
+          ? 'Hermaphrodite'
+          : 'N/A';
       return {
-        name: element,
-        value: element
+        name: value,
+        value: value
       };
     });
 

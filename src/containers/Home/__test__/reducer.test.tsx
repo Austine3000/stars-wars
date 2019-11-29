@@ -6,6 +6,7 @@ describe('Home reducer', () => {
     expect(reducer(undefined, {})).toEqual({
       characters: [],
       movies: [],
+      gender: [],
       isCLoading: false,
       isMLoading: false,
       error: ''
@@ -15,7 +16,14 @@ describe('Home reducer', () => {
   it('shoudld return the movies success', () => {
     expect(
       reducer(
-        { movies: [{}] },
+        {
+          characters: [],
+          movies: [],
+          gender: [],
+          isCLoading: false,
+          isMLoading: false,
+          error: ''
+        },
         {
           type: types.SET_MOVIES_SUCCESS,
           movies: [
@@ -26,6 +34,12 @@ describe('Home reducer', () => {
         }
       )
     ).toEqual({
+      characters: [],
+
+      gender: [],
+      isCLoading: false,
+      isMLoading: false,
+      error: '',
       movies: [
         {
           name: 'The return of jedi'
@@ -34,20 +48,33 @@ describe('Home reducer', () => {
     });
   });
 
-  it('shoudld return the movies success', () => {
+  it('shoudld return the character success', () => {
     expect(
       reducer(
-        { characters: [{}] },
+        {
+          characters: [],
+          movies: [],
+          gender: [],
+          isCLoading: false,
+          isMLoading: false,
+          error: ''
+        },
         {
           type: types.SET_CHARACTERS_SUCCESS,
           characters: [
             {
               name: 'Obi own'
             }
-          ]
+          ],
+          gender: ['male']
         }
       )
     ).toEqual({
+      movies: [],
+      gender: ['male'],
+      isCLoading: false,
+      isMLoading: false,
+      error: '',
       characters: [
         {
           name: 'Obi own'
@@ -59,14 +86,26 @@ describe('Home reducer', () => {
   it('shoudld return the movies loading', () => {
     expect(
       reducer(
-        { isMLoading: false },
+        {
+          characters: [],
+          movies: [],
+          gender: [],
+          isCLoading: false,
+          isMLoading: false,
+          error: ''
+        },
         {
           type: types.SET_MOVIES_LOADING,
           isLoading: true
         }
       )
     ).toEqual({
-      isMLoading: true
+      characters: [],
+      movies: [],
+      gender: [],
+      isCLoading: false,
+      isMLoading: true,
+      error: ''
     });
   });
 
