@@ -1,0 +1,50 @@
+@import '../../index.scss';
+
+#target {
+  color: #ffe11c;
+  overflow: hidden;
+}
+p {
+  padding: 40px 30px;
+  width: 40%;
+  margin: auto;
+  height: 200px;
+  font-size: 20px;
+  letter-spacing: 6px;
+  font-size: 21px;
+  font-weight: bold;
+  line-height: 150%;
+  text-align: center;
+
+  -moz-animation: marquee 5s linear infinite;
+  -webkit-animation: marquee 5s linear infinite;
+  animation: marquee 10s linear infinite;
+}
+@-moz-keyframes marquee {
+  0% {
+    transform: translate(0, 100%);
+  }
+  100% {
+    transform: translate(0, -250%);
+  }
+}
+@-webkit-keyframes marquee {
+  0% {
+    transform: translate(0, 100%);
+  }
+  100% {
+    transform: translate(0, -250%);
+  }
+}
+@keyframes marquee {
+  0% {
+    -moz-transform: translate(0, 100%);
+    -webkit-transform: translate(0, 100%);
+    transform: translate(0, 100%);
+  }
+  100% {
+    -moz-transform: translate(0, -250%);
+    -webkit-transform: translate(0, -250%);
+    transform: translate(0, -250%);
+  }
+}

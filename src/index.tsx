@@ -3,10 +3,17 @@ import ReactDOM from 'react-dom';
 
 import { Provider } from 'react-redux';
 import store from './store/configureStore';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import './index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+
+toast.configure({
+  autoClose: 8000,
+  draggable: false
+});
 
 ReactDOM.render(
   <Provider store={store}>

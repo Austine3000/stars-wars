@@ -1,0 +1,4 @@
+diff a/src/components/TableWrapper/TableWrapper.tsx b/src/components/TableWrapper/TableWrapper.tsx	(rejected hunks)
+@@ -72 +72 @@ const TableWrapper: React.FC<IProps> = (props: IProps) => {
+-                  ""
++                  ''

@@ -1,12 +1,13 @@
-import { AppThunk } from '../../../store/configureStore';
-import AxiosWrapper from '../../../utils/AxiosWrapper';
+import axios from '../../../utils/AxiosWrapper';
 
 import * as types from './types';
 
+// Below are actions for fetch characters success, loading and error
 export const fetchCharactersSuccess = (
-  characters: []
+  characters: any[],
+  gender: any[]
 ): types.SetCharactersType => {
-  return { type: types.SET_CHARACTERS_SUCCESS, characters };
+  return { type: types.SET_CHARACTERS_SUCCESS, characters, gender };
 };
 
 export const fetchCharactersLoading = (
@@ -21,13 +22,83 @@ export const fetchCharactersError = (
   return { type: types.SET_CHARACTERS_ERROR, message };
 };
 
-export const fetchCharacters = (): AppThunk => async dispatch => {
+// Below are actions for fetch movies success, loading and error
+export const fetchMoviesSuccess = (movies: any[]): types.SetMoviesType => {
+  return { type: types.SET_MOVIES_SUCCESS, movies };
+};
+
+export const fetchMoviesLoading = (isLoading: boolean): types.SetMoviesType => {
+  return { type: types.SET_MOVIES_LOADING, isLoading };
+};
+
+export const fetchMoviesError = (message: string): types.SetMoviesType => {
+  return { type: types.SET_MOVIES_ERROR, message };
+};
+
+// Api call to get all movies.
+export const fetchMovies = (): any => async (dispatch: any) => {
   let isLoading = true;
+  dispatch(fetchMoviesLoading(isLoading));
+  try {
+    const response = await axios.get('/films/');
+    isLoading = false;
+
+    const data = response.data.results.sort(
+      (a: any, b: any) =>
+        new Date(b.release_date).getTime() - new Date(a.release_date).getTime()
+    );
+    dispatch(fetchMoviesSuccess(data));
+    dispatch(fetchMoviesLoading(isLoading));
+    return response;
+  } catch (err) {
+    isLoading = false;
+    const message = 'Error getting movies';
+    dispatch(fetchMoviesError(message));
+    dispatch(fetchMoviesLoading(isLoading));
+    throw err;
+  }
+};
+
+// Api call to get all characters
+export const fetchCharacters = (id: string): any => async (
+  dispatch: any,
+  getState: any
+) => {
+  let isLoading = true;
+  const episode = Number(id);
+  const { homeReducer } = getState();
+  const getMovie = homeReducer.movies.filter((item: any) => {
+    return item.episode_id === episode;
+  });
+
   dispatch(fetchCharactersLoading(isLoading));
   try {
-    const response = await AxiosWrapper.get('/characters');
+    let result: any[] = await Promise.all(
+      getMovie[0].characters.map(async (character: any) => {
+        const response = await axios.get(`${character}`);
+        return {
+          name: response.data.name,
+          gender: response.data.gender,
+          height:
+            Number(response.data.height) >= 0
+              ? Number(response.data.height)
+              : response.data.height
+        };
+      })
+    );
+
     isLoading = false;
-    dispatch(fetchCharactersSuccess(response.data));
+    let gender = Array.from(new Set(result.map(x => x.gender)));
+
+    gender = gender.map(element => {
+      return {
+        name: element,
+        value: element
+      };
+    });
+
+    dispatch(fetchCharactersSuccess(result, gender));
+
     dispatch(fetchCharactersLoading(isLoading));
   } catch (err) {
     isLoading = false;
