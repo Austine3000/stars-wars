@@ -4,9 +4,8 @@ import './TableWrapper.scss';
 interface IProps {
   tHeaders: {
     name: string;
-    // sort?: (isAsc: boolean) => React.MouseEventHandler<HTMLElement>;
+
     isSortable: boolean;
-    // isAsc: boolean;
   }[];
   tData: any[];
   numberOfCharacters: number;
@@ -46,13 +45,6 @@ const TableRow: React.FC<IRowProps> = (props: IRowProps) => {
 };
 
 const TableWrapper: React.FC<IProps> = (props: IProps) => {
-  // const sort = (name: string) => {
-  //   character.sort(function(a, b) {
-  //     return a[name] - b[name];
-  //   });
-
-  //   setcharacter(character);
-  // };
   return (
     <React.Fragment>
       <table className="table table-bordered">
@@ -60,17 +52,14 @@ const TableWrapper: React.FC<IProps> = (props: IProps) => {
           <tr>
             {props.tHeaders.length > 0 ? <th>S/N</th> : ''}
             {props.tHeaders.map((tHeader, index) => (
-              <th key={index} className="capitalize">
+              <th
+                key={index}
+                className="capitalize sort-icon"
+                onClick={() => props.handleClickSort(tHeader.name)}
+                onDoubleClick={() => props.handleDBClickSort(tHeader.name)}
+              >
                 {tHeader.name}{' '}
-                {tHeader.isSortable ? (
-                  <i
-                    className="fas fa-sort"
-                    onClick={() => props.handleClickSort(tHeader.name)}
-                    onDoubleClick={() => props.handleDBClickSort(tHeader.name)}
-                  ></i>
-                ) : (
-                  ''
-                )}
+                {tHeader.isSortable ? <i className="fas fa-sort"></i> : ''}
               </th>
             ))}
           </tr>

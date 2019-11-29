@@ -1,0 +1,12 @@
+diff a/src/containers/Home/HomePage.tsx b/src/containers/Home/HomePage.tsx	(rejected hunks)
+@@ -134 +134 @@ const HomePage: React.FC = () => {
+-  function compareValues(key: string, order = "asc") {
++  function compareValues(key: string, order = 'asc') {
+@@ -141,2 +141,2 @@ const HomePage: React.FC = () => {
+-      const varA = typeof a[key] === "string" ? a[key].toUpperCase() : a[key];
+-      const varB = typeof b[key] === "string" ? b[key].toUpperCase() : b[key];
++      const varA = typeof a[key] === 'string' ? a[key].toUpperCase() : a[key];
++      const varB = typeof b[key] === 'string' ? b[key].toUpperCase() : b[key];
+@@ -150 +150 @@ const HomePage: React.FC = () => {
+-      return order === "desc" ? comparison * -1 : comparison;
++      return order === 'desc' ? comparison * -1 : comparison;
