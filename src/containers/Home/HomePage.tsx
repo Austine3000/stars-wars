@@ -32,6 +32,8 @@ const HomePage: React.FC = () => {
   const [genderChoice, setGender] = useState('');
   const [sortTable, setSortTable] = useState({
     name: '',
+    orderName: 'asc',
+    orderHeight: 'asc',
     height: ''
   });
 
@@ -60,6 +62,24 @@ const HomePage: React.FC = () => {
       setSortTable({ ...sortTable, name: value, height: '' });
     } else if (value === 'height') {
       setSortTable({ ...sortTable, name: '', height: value });
+    }
+  };
+
+  const handleDBClickSort = (value: string): void => {
+    if (value === 'name') {
+      setSortTable({
+        ...sortTable,
+        orderName: sortTable.orderName === 'asc' ? 'desc' : 'asc',
+        name: value,
+        height: ''
+      });
+    } else if (value === 'height') {
+      setSortTable({
+        ...sortTable,
+        orderHeight: sortTable.orderHeight === 'asc' ? 'desc' : 'asc',
+        name: '',
+        height: value
+      });
     }
   };
 
@@ -92,24 +112,50 @@ const HomePage: React.FC = () => {
     filteredCharacters = characters;
   }
 
-  if (sortTable.height !== '') {
-    filteredCharacters.sort((a, b) => b.height - a.height);
-  }
+  // if (sortTable.height !== "") {
+  //   filteredCharacters.sort((a, b) => b.height - a.height);
+  // }
 
-  if (sortTable.name !== '') {
-    filteredCharacters.sort((a, b) => {
-      const nameA = a.name.toUpperCase();
-      const nameB = b.name.toUpperCase();
+  // if (sortTable.name !== "") {
+  //   filteredCharacters.sort((a, b) => {
+  //     const nameA = a.name.toUpperCase();
+  //     const nameB = b.name.toUpperCase();
+
+  //     let comparison = 0;
+  //     if (nameA > nameB) {
+  //       comparison = 1;
+  //     } else if (nameA < nameB) {
+  //       comparison = -1;
+  //     }
+  //     return comparison;
+  //   });
+  // }
+
+  function compareValues(key: string, order = 'asc') {
+    return function innerSort(a: any, b: any) {
+      if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+        // property doesn't exist on either object
+        return 0;
+      }
+
+      const varA = typeof a[key] === 'string' ? a[key].toUpperCase() : a[key];
+      const varB = typeof b[key] === 'string' ? b[key].toUpperCase() : b[key];
 
       let comparison = 0;
-      if (nameA > nameB) {
+      if (varA > varB) {
         comparison = 1;
-      } else if (nameA < nameB) {
+      } else if (varA < varB) {
         comparison = -1;
       }
-      return comparison;
-    });
+      return order === 'desc' ? comparison * -1 : comparison;
+    };
   }
+
+  const order = sortTable.name ? sortTable.orderName : sortTable.orderHeight;
+
+  filteredCharacters.sort(
+    compareValues(sortTable.height || sortTable.name, order)
+  );
 
   return (
     <React.Fragment>
@@ -121,6 +167,7 @@ const HomePage: React.FC = () => {
           options={options}
           credits={credits}
           handleMovieChange={handleMovieChange}
+          handleDBClickSort={handleDBClickSort}
           isMLoading={isMLoading}
           gender={gender}
           genderChoice={genderChoice}

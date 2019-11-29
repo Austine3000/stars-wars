@@ -11,6 +11,7 @@ interface IProps {
   tData: any[];
   numberOfCharacters: number;
   handleClickSort: (name: string) => void;
+  handleDBClickSort: (name: string) => void;
   height: number;
 }
 
@@ -65,6 +66,7 @@ const TableWrapper: React.FC<IProps> = (props: IProps) => {
                   <i
                     className="fas fa-sort"
                     onClick={() => props.handleClickSort(tHeader.name)}
+                    onDoubleClick={() => props.handleDBClickSort(tHeader.name)}
                   ></i>
                 ) : (
                   ''

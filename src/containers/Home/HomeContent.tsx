@@ -17,6 +17,7 @@ interface IProps {
   handleGenderChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleMovieChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleClickSort: (name: string) => void;
+  handleDBClickSort: (name: string) => void;
 }
 
 const HomeContent: React.FC<IProps> = (props: IProps) => {
@@ -67,6 +68,7 @@ const HomeContent: React.FC<IProps> = (props: IProps) => {
                 tHeaders={tHeaders}
                 tData={props.characters}
                 handleClickSort={props.handleClickSort}
+                handleDBClickSort={props.handleDBClickSort}
                 height={height}
                 numberOfCharacters={numberOfCharacters}
               />
