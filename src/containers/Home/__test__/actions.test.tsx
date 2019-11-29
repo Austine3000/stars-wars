@@ -148,7 +148,7 @@ describe('Home actions', () => {
         gender: [
           {
             name: 'Male',
-            value: 'Male'
+            value: 'M'
           }
         ]
       },

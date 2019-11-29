@@ -107,7 +107,7 @@ export const fetchCharacters = (id: string): any => async (
           : 'N/A';
       return {
         name: value,
-        value: value
+        value: element
       };
     });
 
