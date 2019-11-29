@@ -9,6 +9,7 @@ export const SET_MOVIES_ERROR = 'SET_MOVIES_ERROR';
 interface ISetCharactersSuccess {
   type: typeof SET_CHARACTERS_SUCCESS;
   characters: any[];
+  gender: any[];
 }
 
 interface ISetCharactersLoading {
@@ -23,7 +24,7 @@ interface ISetCharactersError {
 
 interface ISetMoviesSuccess {
   type: typeof SET_MOVIES_SUCCESS;
-  movies: [];
+  movies: any[];
 }
 
 interface ISetMoviesLoading {

@@ -2,6 +2,8 @@ import React from 'react';
 import TableWrapper from '../../components/TableWrapper/TableWrapper';
 import SelectInput from '../../components/Input/SelectInput';
 import Crawl from '../../components/Crawl/Crawl';
+import Spinner from '../../components/Spinners/Spinner';
+import './Home.scss';
 
 interface IProps {
   characters: any[];
@@ -10,7 +12,11 @@ interface IProps {
   movieChoice: string;
   credits: string;
   options: { value: string; name: string }[];
+  gender: any[];
+  genderChoice: string;
+  handleGenderChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleMovieChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleClickSort: (name: string) => void;
 }
 
 const HomeContent: React.FC<IProps> = (props: IProps) => {
@@ -28,18 +34,52 @@ const HomeContent: React.FC<IProps> = (props: IProps) => {
     };
   });
 
+  let height = 0;
+  let numberOfCharacters = 0;
+
+  props.characters.forEach(element => {
+    if (Number(element.height) >= 0) {
+      height = height + Number(element.height);
+    }
+    numberOfCharacters = numberOfCharacters + 1;
+  });
+
   return (
     <React.Fragment>
-      <React.Suspense fallback={<div>Loading...</div>}>
-        <h1>Home Content</h1>
+      <div className="select-box-area">
         <SelectInput
           options={props.options}
           onchange={props.handleMovieChange}
           value={props.movieChoice}
         />
-        <Crawl credits={props.credits} />
-        <TableWrapper tHeaders={tHeaders} tData={props.characters} />
-      </React.Suspense>
+      </div>
+      {props.credits !== '' ? (
+        <>
+          <Crawl credits={props.credits} />
+          {!props.isCLoading ? (
+            <div className="table-area">
+              <SelectInput
+                options={props.gender}
+                onchange={props.handleGenderChange}
+                value={props.genderChoice}
+              />
+              <TableWrapper
+                tHeaders={tHeaders}
+                tData={props.characters}
+                handleClickSort={props.handleClickSort}
+                height={height}
+                numberOfCharacters={numberOfCharacters}
+              />
+            </div>
+          ) : (
+            <Spinner />
+          )}
+        </>
+      ) : (
+        <div className="logo-area">
+          <img src="/assets/Star_Wars_Logo.svg.png" alt="star-wars-logo" />
+        </div>
+      )}
     </React.Fragment>
   );
 };

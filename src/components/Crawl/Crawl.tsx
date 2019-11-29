@@ -7,9 +7,11 @@ interface IProps {
 
 const Crawl: React.FC<IProps> = (props: IProps) => {
   return (
-    <div id="target">
-      <p>{props.credits}</p>
-    </div>
+    <>
+      <div id="target">
+        <p>{props.credits}</p>
+      </div>
+    </>
   );
 };
 

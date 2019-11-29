@@ -14,6 +14,7 @@ interface ICharacters {
   movies: any[];
   isCLoading: boolean;
   isMLoading: boolean;
+  gender: any[];
   error: string;
 }
 
@@ -22,6 +23,7 @@ const initialState: ICharacters = {
   movies: [],
   isCLoading: false,
   isMLoading: false,
+  gender: [],
   error: ''
 };
 
@@ -33,7 +35,8 @@ export default (
     case SET_CHARACTERS_SUCCESS:
       return {
         ...state,
-        characters: action.characters
+        characters: action.characters,
+        gender: action.gender
       };
     case SET_CHARACTERS_LOADING:
       return {

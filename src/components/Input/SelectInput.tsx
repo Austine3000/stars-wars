@@ -1,4 +1,12 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const Select = styled.select`
+  padding: 10px 100px 10px 10px;
+  border-radius: 0px;
+  font-weight: 600;
+  background-color: #fff;
+`;
 
 interface IProps {
   onchange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -9,12 +17,14 @@ interface IProps {
 const SelectInput: React.FC<IProps> = (props: IProps) => {
   return (
     <React.Fragment>
-      <select value={props.value} onChange={props.onchange}>
-        <option value="0">--Please choose an option--</option>
+      <Select value={props.value} onChange={props.onchange}>
+        <option value="">-- Please choose an option --</option>
         {props.options.map((option, index) => (
-          <option value={option.value}>{option.name}</option>
+          <option value={option.value} key={index}>
+            {option.name}
+          </option>
         ))}
-      </select>
+      </Select>
     </React.Fragment>
   );
 };

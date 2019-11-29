@@ -2,10 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMovies, fetchCharacters } from './redux/actions';
 import { rootState } from '../../store/reducers';
+import { toast } from 'react-toastify';
+import Spinner from '../../components/Spinners/Spinner';
 
 const HomeContent = React.lazy(() => import('./HomeContent'));
 
 type ChangeEvent = React.ChangeEvent<HTMLSelectElement>;
+type MouseEvent = React.MouseEventHandler<HTMLElement>;
 
 interface Imovie {
   title: string;
@@ -15,17 +18,27 @@ interface Imovie {
 const HomePage: React.FC = () => {
   const dispatch = useDispatch();
 
-  const { characters, movies, isMLoading, isCLoading } = useSelector(
-    (state: rootState) => state.homeReducer
-  );
+  const {
+    characters,
+    movies,
+    isMLoading,
+    isCLoading,
+    error,
+    gender
+  } = useSelector((state: rootState) => state.homeReducer);
 
   const [movieChoice, setMovieChoice] = useState('');
   const [credits, setCredits] = useState('');
+  const [genderChoice, setGender] = useState('');
+  const [sortTable, setSortTable] = useState({
+    name: '',
+    height: ''
+  });
 
   const handleMovieChange = (e: ChangeEvent): void => {
     const { value } = e.target;
     setMovieChoice(value);
-    if (value !== '0') {
+    if (value !== '') {
       dispatch(fetchCharacters(value));
       let credits = movies.find(item => {
         return item.episode_id === Number(value);
@@ -35,6 +48,15 @@ const HomePage: React.FC = () => {
     } else {
       setCredits('');
     }
+  };
+
+  const handleGenderChange = (e: ChangeEvent): void => {
+    const { value } = e.target;
+    setGender(value);
+  };
+
+  const handleClickSort = (value: string): void => {
+    setSortTable({ ...sortTable, [value]: value });
   };
 
   const getAllMovies = useCallback(() => {
@@ -53,17 +75,42 @@ const HomePage: React.FC = () => {
     return items;
   });
 
+  if (error !== '') {
+    toast.error(error);
+  }
+
+  let filteredCharacters;
+  if (genderChoice !== '') {
+    filteredCharacters = characters.filter(element => {
+      return element.gender === genderChoice;
+    });
+  } else {
+    filteredCharacters = characters;
+  }
+
+  if (sortTable.height !== '') {
+    filteredCharacters.sort((a, b) => b.height - a.height);
+  }
+
+  if (sortTable.name !== '') {
+    filteredCharacters.sort();
+  }
+
   return (
     <React.Fragment>
-      <React.Suspense fallback={<div>Loading...</div>}>
+      <React.Suspense fallback={<Spinner />}>
         <HomeContent
-          characters={characters}
+          characters={filteredCharacters}
           isCLoading={isCLoading}
           movieChoice={movieChoice}
           options={options}
           credits={credits}
           handleMovieChange={handleMovieChange}
           isMLoading={isMLoading}
+          gender={gender}
+          genderChoice={genderChoice}
+          handleGenderChange={handleGenderChange}
+          handleClickSort={handleClickSort}
         />
       </React.Suspense>
     </React.Fragment>
