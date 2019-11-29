@@ -79,10 +79,9 @@ export const fetchCharacters = (id: string): any => async (
         return {
           name: response.data.name,
           gender: response.data.gender,
-          height:
-            Number(response.data.height) >= 0
-              ? Number(response.data.height)
-              : response.data.height
+          height: Number.isNaN(Number(response.data.height))
+            ? response.data.height
+            : Number(response.data.height)
         };
       })
     );
