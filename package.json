@@ -30,7 +30,7 @@
   },
   "engines": {
     "npm": "6.10",
-    "node": "10.50"
+    "node": "10.15"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
