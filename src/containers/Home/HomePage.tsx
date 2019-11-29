@@ -56,7 +56,11 @@ const HomePage: React.FC = () => {
   };
 
   const handleClickSort = (value: string): void => {
-    setSortTable({ ...sortTable, [value]: value });
+    if (value === 'name') {
+      setSortTable({ ...sortTable, name: value, height: '' });
+    } else if (value === 'height') {
+      setSortTable({ ...sortTable, name: '', height: value });
+    }
   };
 
   const getAllMovies = useCallback(() => {
@@ -93,7 +97,18 @@ const HomePage: React.FC = () => {
   }
 
   if (sortTable.name !== '') {
-    filteredCharacters.sort();
+    filteredCharacters.sort((a, b) => {
+      const nameA = a.name.toUpperCase();
+      const nameB = b.name.toUpperCase();
+
+      let comparison = 0;
+      if (nameA > nameB) {
+        comparison = 1;
+      } else if (nameA < nameB) {
+        comparison = -1;
+      }
+      return comparison;
+    });
   }
 
   return (
