@@ -4,16 +4,30 @@ import thunk from 'redux-thunk';
 import * as actions from '../redux/actions';
 import * as types from '../redux/types';
 
-jest.mock('../../../utils/AxiosWrapper', () => ({
-  get: jest.fn(() => ({
-    data: {
-      results: [{}]
-    }
-  }))
-}));
-
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
+
+jest.mock('../../../utils/AxiosWrapper', () => ({
+  get: jest.fn(url => {
+    let result;
+    if (url === '/films/') {
+      result = {
+        data: {
+          results: [{}]
+        }
+      };
+    } else if (url === '/people/2') {
+      result = {
+        data: {
+          name: 'John',
+          gender: 'male',
+          height: '250'
+        }
+      };
+    }
+    return result;
+  })
+}));
 
 describe('Home actions', () => {
   it('should get all movies success', () => {
@@ -126,15 +140,15 @@ describe('Home actions', () => {
         type: types.SET_CHARACTERS_SUCCESS,
         characters: [
           {
-            name: undefined,
-            gender: undefined,
-            height: undefined
+            name: 'John',
+            gender: 'M',
+            height: 250
           }
         ],
         gender: [
           {
-            name: undefined,
-            value: undefined
+            name: 'Male',
+            value: 'Male'
           }
         ]
       },
