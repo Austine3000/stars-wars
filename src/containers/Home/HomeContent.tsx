@@ -49,6 +49,7 @@ const HomeContent: React.FC<IProps> = (props: IProps) => {
       <div className="select-box-area">
         <SelectInput
           options={props.options}
+          name="movie"
           onchange={props.handleMovieChange}
           value={props.movieChoice}
         />
@@ -60,6 +61,7 @@ const HomeContent: React.FC<IProps> = (props: IProps) => {
             <div className="table-area">
               <SelectInput
                 options={props.gender}
+                name="gender"
                 onchange={props.handleGenderChange}
                 value={props.genderChoice}
               />
