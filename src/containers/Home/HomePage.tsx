@@ -4,6 +4,7 @@ import { fetchMovies, fetchCharacters } from './redux/actions';
 import { rootState } from '../../store/reducers';
 import { toast } from 'react-toastify';
 import Spinner from '../../components/Spinners/Spinner';
+import CompareMethod from '../../Helpers/CompareMethod';
 
 const HomeContent = React.lazy(() => import('./HomeContent'));
 
@@ -57,14 +58,6 @@ const HomePage: React.FC = () => {
     setGender(value);
   };
 
-  const handleClickSort = (value: string): void => {
-    if (value === 'name') {
-      setSortTable({ ...sortTable, name: value, height: '' });
-    } else if (value === 'height') {
-      setSortTable({ ...sortTable, name: '', height: value });
-    }
-  };
-
   const handleDBClickSort = (value: string): void => {
     if (value === 'name') {
       setSortTable({
@@ -112,28 +105,10 @@ const HomePage: React.FC = () => {
     filteredCharacters = characters;
   }
 
-  const compareValues = (key: string, order = 'asc') => (a: any, b: any) => {
-    if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
-      // property doesn't exist on either object
-      return 0;
-    }
-
-    const varA = typeof a[key] === 'string' ? a[key].toUpperCase() : a[key];
-    const varB = typeof b[key] === 'string' ? b[key].toUpperCase() : b[key];
-
-    let comparison = 0;
-    if (varA > varB) {
-      comparison = 1;
-    } else if (varA < varB) {
-      comparison = -1;
-    }
-    return order === 'desc' ? comparison * -1 : comparison;
-  };
-
   const order = sortTable.name ? sortTable.orderName : sortTable.orderHeight;
 
   filteredCharacters.sort(
-    compareValues(sortTable.height || sortTable.name, order)
+    CompareMethod(sortTable.height || sortTable.name, order)
   );
 
   return (
@@ -151,7 +126,6 @@ const HomePage: React.FC = () => {
           gender={gender}
           genderChoice={genderChoice}
           handleGenderChange={handleGenderChange}
-          handleClickSort={handleClickSort}
         />
       </React.Suspense>
     </React.Fragment>
