@@ -3,6 +3,7 @@ import TableWrapper from '../../components/TableWrapper/TableWrapper';
 import SelectInput from '../../components/Input/SelectInput';
 import Crawl from '../../components/Crawl/Crawl';
 import Spinner from '../../components/Spinners/Spinner';
+import { MainContent, LogoArea } from '../../components/Layout/MainContent';
 import './Home.scss';
 
 interface IProps {
@@ -46,14 +47,14 @@ const HomeContent: React.FC<IProps> = (props: IProps) => {
 
   return (
     <React.Fragment>
-      <div className="select-box-area">
+      <MainContent>
         <SelectInput
           options={props.options}
           name="movie"
           onchange={props.handleMovieChange}
           value={props.movieChoice}
         />
-      </div>
+      </MainContent>
       {props.credits !== '' ? (
         <>
           <Crawl credits={props.credits} />
@@ -78,9 +79,9 @@ const HomeContent: React.FC<IProps> = (props: IProps) => {
           )}
         </>
       ) : (
-        <div className="logo-area">
-          <img src="/assets/Star_Wars_Logo.svg.png" alt="star-wars-logo" />
-        </div>
+        <LogoArea>
+          <img src="/assets/star-wars-logo-png-8.png" alt="star-wars-logo" />
+        </LogoArea>
       )}
     </React.Fragment>
   );

@@ -1,4 +1,5 @@
 import React from 'react';
+import { CrawlWrapper } from './CrawlWrapper';
 import './Crawl.scss';
 
 interface IProps {
@@ -8,9 +9,9 @@ interface IProps {
 const Crawl: React.FC<IProps> = (props: IProps) => {
   return (
     <>
-      <div id="target">
+      <CrawlWrapper>
         <p>{props.credits}</p>
-      </div>
+      </CrawlWrapper>
     </>
   );
 };
