@@ -1,4 +1,5 @@
 import axios from '../../../utils/AxiosWrapper';
+import Memoize from '../../../Helpers/MemoizeMethod';
 
 import * as types from './types';
 
@@ -36,89 +37,89 @@ export const fetchMoviesError = (message: string): types.SetMoviesType => {
 };
 
 // Api call to get all movies.
-export const fetchMovies = (): any => async (dispatch: any) => {
-  let isLoading = true;
-  dispatch(fetchMoviesLoading(isLoading));
-  try {
-    const response = await axios.get('/films/');
-    isLoading = false;
-
-    const data = response.data.results.sort(
-      (a: any, b: any) =>
-        new Date(b.release_date).getTime() - new Date(a.release_date).getTime()
-    );
-    dispatch(fetchMoviesSuccess(data));
+export const fetchMovies = (): any =>
+  Memoize(async (dispatch: any) => {
+    let isLoading = true;
     dispatch(fetchMoviesLoading(isLoading));
-    return response;
-  } catch (err) {
-    isLoading = false;
-    const message = 'Error getting movies';
-    dispatch(fetchMoviesError(message));
-    dispatch(fetchMoviesLoading(isLoading));
-    throw err;
-  }
-};
+    try {
+      const response = await axios.get('/films/');
+      isLoading = false;
 
-// Api call to get all characters
-export const fetchCharacters = (id: string): any => async (
-  dispatch: any,
-  getState: any
-) => {
-  let isLoading = true;
-  const episode = Number(id);
-  const { homeReducer } = getState();
-  const getMovie = homeReducer.movies.filter((item: any) => {
-    return item.episode_id === episode;
+      const data = response.data.results.sort(
+        (a: any, b: any) =>
+          new Date(b.release_date).getTime() -
+          new Date(a.release_date).getTime()
+      );
+      dispatch(fetchMoviesSuccess(data));
+      dispatch(fetchMoviesLoading(isLoading));
+      return response;
+    } catch (err) {
+      isLoading = false;
+      const message = 'Error getting movies';
+      dispatch(fetchMoviesError(message));
+      dispatch(fetchMoviesLoading(isLoading));
+      throw err;
+    }
   });
 
-  dispatch(fetchCharactersLoading(isLoading));
-  try {
-    let result: any[] = await Promise.all(
-      getMovie[0].characters.map(async (character: any) => {
-        const response = await axios.get(`${character}`);
-        return {
-          name: response.data.name,
-          gender:
-            response.data.gender === 'male'
-              ? 'M'
-              : response.data.gender === 'female'
-              ? 'F'
-              : response.data.gender === 'hermaphrodite'
-              ? 'HERM'
-              : 'N/A',
-          height: Number.isNaN(Number(response.data.height))
-            ? response.data.height
-            : Number(response.data.height)
-        };
-      })
-    );
-
-    isLoading = false;
-    let gender = Array.from(new Set(result.map(x => x.gender)));
-
-    gender = gender.map(element => {
-      const value =
-        element === 'M'
-          ? 'Male'
-          : element === 'F'
-          ? 'Female'
-          : element === 'HERM'
-          ? 'Hermaphrodite'
-          : 'N/A';
-      return {
-        name: value,
-        value: element
-      };
+// Api call to get all characters
+export const fetchCharacters = (id: string): any =>
+  Memoize(async (dispatch: any, getState: any) => {
+    let isLoading = true;
+    const episode = Number(id);
+    const { homeReducer } = getState();
+    const getMovie = homeReducer.movies.filter((item: any) => {
+      return item.episode_id === episode;
     });
 
-    dispatch(fetchCharactersSuccess(result, gender));
+    dispatch(fetchCharactersLoading(isLoading));
+    try {
+      let result: any[] = await Promise.all(
+        getMovie[0].characters.map(async (character: any) => {
+          const response = await axios.get(`${character}`);
+          return {
+            name: response.data.name,
+            gender:
+              response.data.gender === 'male'
+                ? 'M'
+                : response.data.gender === 'female'
+                ? 'F'
+                : response.data.gender === 'hermaphrodite'
+                ? 'HERM'
+                : 'N/A',
+            height: Number.isNaN(Number(response.data.height))
+              ? response.data.height
+              : Number(response.data.height)
+          };
+        })
+      );
 
-    dispatch(fetchCharactersLoading(isLoading));
-  } catch (err) {
-    isLoading = false;
-    const message = 'Error getting characters';
-    dispatch(fetchCharactersError(message));
-    dispatch(fetchCharactersLoading(isLoading));
-    throw err;
-  }
-};
+      isLoading = false;
+      let gender = Array.from(new Set(result.map(x => x.gender)));
+
+      gender = gender.map(element => {
+        const value =
+          element === 'M'
+            ? 'Male'
+            : element === 'F'
+            ? 'Female'
+            : element === 'HERM'
+            ? 'Hermaphrodite'
+            : 'N/A';
+        return {
+          name: value,
+          value: element
+        };
+      });
+
+      dispatch(fetchCharactersSuccess(result, gender));
+
+      dispatch(fetchCharactersLoading(isLoading));
+    } catch (err) {
+      isLoading = false;
+      const message = 'Error getting characters';
+      dispatch(fetchCharactersError(message));
+      dispatch(fetchCharactersLoading(isLoading));
+      throw err;
+    }
+  });
