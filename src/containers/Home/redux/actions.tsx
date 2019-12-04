@@ -38,7 +38,7 @@ export const fetchMoviesError = (message: string): types.SetMoviesType => {
 
 // Api call to get all movies.
 export const fetchMovies = (dispatch: any): any => {
-  return Memoize(async () => {
+  return (async () => {
     let isLoading = true;
     dispatch(fetchMoviesLoading(isLoading));
     try {
@@ -64,12 +64,12 @@ export const fetchMovies = (dispatch: any): any => {
 };
 
 // Api call to get all characters
-export const fetchCharacters = (
+export const MemoizeCharacters = (
   dispatch: any,
   id: string,
   movies: any[]
 ): any => {
-  return Memoize(async () => {
+  return (async () => {
     let isLoading = true;
     const episode = Number(id);
     const moviesList: any[] = movies;
@@ -130,3 +130,5 @@ export const fetchCharacters = (
     }
   })();
 };
+
+export const fetchCharacters = Memoize(MemoizeCharacters);
