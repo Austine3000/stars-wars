@@ -118,11 +118,7 @@ describe('Home actions', () => {
     const id = '2';
 
     const moviesItems = [{ episode_id: 2, characters: ['/people/2'] }];
-    const characters = await actions.fetchCharacters.process(
-      dispatch,
-      id,
-      moviesItems
-    );
+    const characters = await actions.fetchCharacters(dispatch, id, moviesItems);
     expect(characters[0]).toEqual(expectedActions);
 
     done();

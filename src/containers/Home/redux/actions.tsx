@@ -63,8 +63,35 @@ export const fetchMovies = (dispatch: any): any => {
   })();
 };
 
+const MemoizefetchCharacterRequest = (getMovie: any[]) => {
+  return (async () => {
+    const result = await Promise.all(
+      getMovie[0].characters.map(async (character: any) => {
+        const response = await axios.get(`${character}`);
+        return {
+          name: response.data.name,
+          gender:
+            response.data.gender === 'male'
+              ? 'M'
+              : response.data.gender === 'female'
+              ? 'F'
+              : response.data.gender === 'hermaphrodite'
+              ? 'HERM'
+              : 'N/A',
+          height: Number.isNaN(Number(response.data.height))
+            ? response.data.height
+            : Number(response.data.height)
+        };
+      })
+    );
+    return result;
+  })();
+};
+
+export const fetchCharacterRequest = Memoize(MemoizefetchCharacterRequest);
+
 // Api call to get all characters
-export const MemoizeCharacters = (
+export const fetchCharacters = (
   dispatch: any,
   id: string,
   movies: any[]
@@ -79,28 +106,10 @@ export const MemoizeCharacters = (
 
     dispatch(fetchCharactersLoading(isLoading));
     try {
-      let result: any[] = await Promise.all(
-        getMovie[0].characters.map(async (character: any) => {
-          const response = await axios.get(`${character}`);
-          return {
-            name: response.data.name,
-            gender:
-              response.data.gender === 'male'
-                ? 'M'
-                : response.data.gender === 'female'
-                ? 'F'
-                : response.data.gender === 'hermaphrodite'
-                ? 'HERM'
-                : 'N/A',
-            height: Number.isNaN(Number(response.data.height))
-              ? response.data.height
-              : Number(response.data.height)
-          };
-        })
-      );
+      const result: any = await fetchCharacterRequest(getMovie);
 
       isLoading = false;
-      let gender = Array.from(new Set(result.map(x => x.gender)));
+      let gender = Array.from(new Set(result.map((x: any) => x.gender)));
 
       gender = gender.map(element => {
         const value =
@@ -130,5 +139,3 @@ export const MemoizeCharacters = (
     }
   })();
 };
-
-export const fetchCharacters = Memoize(MemoizeCharacters);
