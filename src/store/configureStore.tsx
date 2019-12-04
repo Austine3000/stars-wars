@@ -1,32 +1,20 @@
-import thunkMiddleware, { ThunkAction } from 'redux-thunk';
-import { createStore, applyMiddleware, compose, Action } from 'redux';
-import { rootReducer, rootState } from './reducers';
+import React from 'react';
 
-const middleware = [thunkMiddleware];
+import Movie, { IMovies } from '../containers/Home/redux/reducer';
 
-if (process.env.NODE_ENV === `development`) {
-  const { logger } = require(`redux-logger`);
-
-  middleware.push(logger);
+interface IContextProps {
+  movies: IMovies;
+  dispatch: ({ type }: { type: string }) => void;
 }
 
-const composeEnhancers =
-  typeof window === 'object' &&
-  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
-    : compose;
+export const Store = React.createContext({} as IContextProps);
 
-const enhancer = composeEnhancers(applyMiddleware(...middleware));
+export function StoreProvider(props: any) {
+  const [movies, dispatch] = React.useReducer(
+    Movie.HomeReducer,
+    Movie.initialState
+  );
 
-const store = createStore(rootReducer, enhancer);
-
-export type AppDispatch = typeof store.dispatch;
-
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  rootState,
-  null,
-  Action<string>
->;
-
-export default store;
+  const value = { movies, dispatch };
+  return <Store.Provider value={value}>{props.children}</Store.Provider>;
+}

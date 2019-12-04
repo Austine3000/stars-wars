@@ -37,8 +37,8 @@ export const fetchMoviesError = (message: string): types.SetMoviesType => {
 };
 
 // Api call to get all movies.
-export const fetchMovies = (): any =>
-  Memoize(async (dispatch: any) => {
+export const fetchMovies = (dispatch: any): any => {
+  return Memoize(async () => {
     let isLoading = true;
     dispatch(fetchMoviesLoading(isLoading));
     try {
@@ -60,15 +60,20 @@ export const fetchMovies = (): any =>
       dispatch(fetchMoviesLoading(isLoading));
       throw err;
     }
-  });
+  })();
+};
 
 // Api call to get all characters
-export const fetchCharacters = (id: string): any =>
-  Memoize(async (dispatch: any, getState: any) => {
+export const fetchCharacters = (
+  dispatch: any,
+  id: string,
+  movies: any[]
+): any => {
+  return Memoize(async () => {
     let isLoading = true;
     const episode = Number(id);
-    const { homeReducer } = getState();
-    const getMovie = homeReducer.movies.filter((item: any) => {
+    const moviesList: any[] = movies;
+    const getMovie = moviesList.filter((item: any) => {
       return item.episode_id === episode;
     });
 
@@ -115,6 +120,7 @@ export const fetchCharacters = (id: string): any =>
       dispatch(fetchCharactersSuccess(result, gender));
 
       dispatch(fetchCharactersLoading(isLoading));
+      return result;
     } catch (err) {
       isLoading = false;
       const message = 'Error getting characters';
@@ -122,4 +128,5 @@ export const fetchCharacters = (id: string): any =>
       dispatch(fetchCharactersLoading(isLoading));
       throw err;
     }
-  });
+  })();
+};

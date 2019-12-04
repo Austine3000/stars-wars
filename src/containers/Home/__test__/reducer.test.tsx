@@ -1,21 +1,10 @@
-import reducer from '../redux/reducer';
+import { HomeReducer } from '../redux/reducer';
 import * as types from '../redux/types';
 
 describe('Home reducer', () => {
-  it('should return the initial state', () => {
-    expect(reducer(undefined, {})).toEqual({
-      characters: [],
-      movies: [],
-      gender: [],
-      isCLoading: false,
-      isMLoading: false,
-      error: ''
-    });
-  });
-
   it('shoudld return the movies success', () => {
     expect(
-      reducer(
+      HomeReducer(
         {
           characters: [],
           movies: [],
@@ -50,7 +39,7 @@ describe('Home reducer', () => {
 
   it('shoudld return the character success', () => {
     expect(
-      reducer(
+      HomeReducer(
         {
           characters: [],
           movies: [],
@@ -85,7 +74,7 @@ describe('Home reducer', () => {
 
   it('shoudld return the movies loading', () => {
     expect(
-      reducer(
+      HomeReducer(
         {
           characters: [],
           movies: [],
@@ -111,7 +100,7 @@ describe('Home reducer', () => {
 
   it('shoudld return the characters loading', () => {
     expect(
-      reducer(
+      HomeReducer(
         { isCLoading: false },
         {
           type: types.SET_CHARACTERS_LOADING,
@@ -125,7 +114,7 @@ describe('Home reducer', () => {
 
   it('shoudld return the movies error', () => {
     expect(
-      reducer(
+      HomeReducer(
         { error: '' },
         {
           type: types.SET_MOVIES_ERROR,
@@ -139,7 +128,7 @@ describe('Home reducer', () => {
 
   it('shoudld return the character error', () => {
     expect(
-      reducer(
+      HomeReducer(
         { error: '' },
         {
           type: types.SET_CHARACTERS_ERROR,
