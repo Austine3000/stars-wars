@@ -50,7 +50,7 @@ const HomePage: React.FC = () => {
     const { value } = e.target;
     setMovieChoice(value);
     if (value !== '') {
-      fetchCharacters.process(dispatch, value, state.movies);
+      fetchCharacters(dispatch, value, state.movies);
       let credits = state.movies.find(item => {
         return item.episode_id === Number(value);
       });
