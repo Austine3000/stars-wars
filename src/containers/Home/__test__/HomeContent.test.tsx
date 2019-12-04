@@ -5,23 +5,32 @@ import HomeContent from '../HomeContent';
 beforeEach(cleanup);
 
 describe('<HomeContent>', () => {
-  const characters = [{}];
+  const filteredCharacters = [{}];
   const isCLoading = true;
   const movieChoice = '';
   const options = [{ name: '', value: '' }];
   const credits = '';
   const handleMovieChange = jest.fn();
+  const handleDBClickSort = jest.fn();
+  const gender = [{}];
+  const genderChoice = '';
+  const handleGenderChange = jest.fn();
+
   const isMLoading = true;
   const renderComponent = () => {
     return render(
       <HomeContent
-        characters={characters}
+        characters={filteredCharacters}
         isCLoading={isCLoading}
         movieChoice={movieChoice}
         options={options}
         credits={credits}
         handleMovieChange={handleMovieChange}
+        handleDBClickSort={handleDBClickSort}
         isMLoading={isMLoading}
+        gender={gender}
+        genderChoice={genderChoice}
+        handleGenderChange={handleGenderChange}
       />
     );
   };

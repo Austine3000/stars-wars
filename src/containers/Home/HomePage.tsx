@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { Store } from '../../store/configureStore';
 import { fetchMovies, fetchCharacters } from './redux/actions';
-import { rootState } from '../../store/reducers';
 import { toast } from 'react-toastify';
 import Spinner from '../../components/Spinners/Spinner';
+import CompareMethod from '../../Helpers/CompareMethod';
 
 const HomeContent = React.lazy(() => import('./HomeContent'));
 
@@ -15,17 +15,26 @@ interface Imovie {
   episode_id: Number;
 }
 
-const HomePage: React.FC = () => {
-  const dispatch = useDispatch();
+interface IState {
+  characters: any[];
+  movies: any[];
+  isCLoading: boolean;
+  isMLoading: boolean;
+  gender: any[];
+  error: string;
+}
 
-  const {
-    characters,
-    movies,
-    isMLoading,
-    isCLoading,
-    error,
-    gender
-  } = useSelector((state: rootState) => state.homeReducer);
+const HomePage: React.FC = () => {
+  const { movies, dispatch } = React.useContext(Store);
+
+  const state: IState = {
+    characters: movies.characters,
+    movies: movies.movies,
+    isCLoading: movies.isCLoading,
+    isMLoading: movies.isMLoading,
+    gender: movies.gender,
+    error: movies.error
+  };
 
   const [movieChoice, setMovieChoice] = useState('');
   const [credits, setCredits] = useState('');
@@ -41,8 +50,8 @@ const HomePage: React.FC = () => {
     const { value } = e.target;
     setMovieChoice(value);
     if (value !== '') {
-      dispatch(fetchCharacters(value));
-      let credits = movies.find(item => {
+      fetchCharacters.process(dispatch, value, state.movies);
+      let credits = state.movies.find(item => {
         return item.episode_id === Number(value);
       });
 
@@ -55,14 +64,6 @@ const HomePage: React.FC = () => {
   const handleGenderChange = (e: ChangeEvent): void => {
     const { value } = e.target;
     setGender(value);
-  };
-
-  const handleClickSort = (value: string): void => {
-    if (value === 'name') {
-      setSortTable({ ...sortTable, name: value, height: '' });
-    } else if (value === 'height') {
-      setSortTable({ ...sortTable, name: '', height: value });
-    }
   };
 
   const handleDBClickSort = (value: string): void => {
@@ -84,14 +85,14 @@ const HomePage: React.FC = () => {
   };
 
   const getAllMovies = useCallback(() => {
-    dispatch(fetchMovies());
+    fetchMovies(dispatch);
   }, [dispatch]);
 
   useEffect(() => {
     getAllMovies();
   }, [getAllMovies]);
 
-  const options = movies.map(movie => {
+  const options = state.movies.map(movie => {
     var items = {
       name: movie.title,
       value: String(movie.episode_id)
@@ -99,41 +100,23 @@ const HomePage: React.FC = () => {
     return items;
   });
 
-  if (error !== '') {
-    toast.error(error);
+  if (state.error !== '') {
+    toast.error(state.error);
   }
 
   let filteredCharacters;
   if (genderChoice !== '') {
-    filteredCharacters = characters.filter(element => {
+    filteredCharacters = state.characters.filter(element => {
       return element.gender === genderChoice;
     });
   } else {
-    filteredCharacters = characters;
+    filteredCharacters = state.characters;
   }
-
-  const compareValues = (key: string, order = 'asc') => (a: any, b: any) => {
-    if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
-      // property doesn't exist on either object
-      return 0;
-    }
-
-    const varA = typeof a[key] === 'string' ? a[key].toUpperCase() : a[key];
-    const varB = typeof b[key] === 'string' ? b[key].toUpperCase() : b[key];
-
-    let comparison = 0;
-    if (varA > varB) {
-      comparison = 1;
-    } else if (varA < varB) {
-      comparison = -1;
-    }
-    return order === 'desc' ? comparison * -1 : comparison;
-  };
 
   const order = sortTable.name ? sortTable.orderName : sortTable.orderHeight;
 
   filteredCharacters.sort(
-    compareValues(sortTable.height || sortTable.name, order)
+    CompareMethod(sortTable.height || sortTable.name, order)
   );
 
   return (
@@ -141,17 +124,16 @@ const HomePage: React.FC = () => {
       <React.Suspense fallback={<Spinner />}>
         <HomeContent
           characters={filteredCharacters}
-          isCLoading={isCLoading}
+          isCLoading={state.isCLoading}
           movieChoice={movieChoice}
           options={options}
           credits={credits}
           handleMovieChange={handleMovieChange}
           handleDBClickSort={handleDBClickSort}
-          isMLoading={isMLoading}
-          gender={gender}
+          isMLoading={state.isMLoading}
+          gender={state.gender}
           genderChoice={genderChoice}
           handleGenderChange={handleGenderChange}
-          handleClickSort={handleClickSort}
         />
       </React.Suspense>
     </React.Fragment>

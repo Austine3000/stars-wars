@@ -4,12 +4,10 @@ import {
   SET_CHARACTERS_ERROR,
   SET_MOVIES_LOADING,
   SET_MOVIES_ERROR,
-  SET_MOVIES_SUCCESS,
-  SetMoviesType,
-  SetCharactersType
+  SET_MOVIES_SUCCESS
 } from './types';
 
-interface ICharacters {
+export interface IMovies {
   characters: any[];
   movies: any[];
   isCLoading: boolean;
@@ -18,7 +16,7 @@ interface ICharacters {
   error: string;
 }
 
-const initialState: ICharacters = {
+const initialState: IMovies = {
   characters: [],
   movies: [],
   isCLoading: false,
@@ -27,10 +25,7 @@ const initialState: ICharacters = {
   error: ''
 };
 
-export default (
-  state = initialState,
-  action: SetCharactersType | SetMoviesType
-) => {
+export function HomeReducer(state: IMovies, action: any) {
   switch (action.type) {
     case SET_CHARACTERS_SUCCESS:
       return {
@@ -66,4 +61,11 @@ export default (
     default:
       return state;
   }
+}
+
+const Movies = {
+  initialState: initialState,
+  HomeReducer: HomeReducer
 };
+
+export default Movies;

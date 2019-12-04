@@ -1,11 +1,5 @@
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-
 import * as actions from '../redux/actions';
 import * as types from '../redux/types';
-
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
 
 jest.mock('../../../utils/AxiosWrapper', () => ({
   get: jest.fn(url => {
@@ -13,7 +7,11 @@ jest.mock('../../../utils/AxiosWrapper', () => ({
     if (url === '/films/') {
       result = {
         data: {
-          results: [{}]
+          results: [
+            {
+              name: 'Last Jedi'
+            }
+          ]
         }
       };
     } else if (url === '/people/2') {
@@ -21,13 +19,15 @@ jest.mock('../../../utils/AxiosWrapper', () => ({
         data: {
           name: 'John',
           gender: 'male',
-          height: '250'
+          height: 250
         }
       };
     }
     return result;
   })
 }));
+
+const dispatch = jest.fn();
 
 describe('Home actions', () => {
   it('should get all movies success', () => {
@@ -101,78 +101,30 @@ describe('Home actions', () => {
   });
 
   it('creates SET_MOVIES_SUCCESS when fetching movies has been done', async done => {
-    const expectedActions = [
-      {
-        type: types.SET_MOVIES_LOADING,
-        isLoading: true
-      },
-      {
-        type: types.SET_MOVIES_SUCCESS,
-        movies: [{}]
-      },
-      {
-        type: types.SET_MOVIES_LOADING,
-        isLoading: false
-      }
-    ];
-    const store = mockStore({
-      homeReducer: {
-        characters: [],
-        movies: [],
-        isCLoading: false,
-        isMLoading: false,
-        error: ''
-      }
-    });
-    await store.dispatch(actions.fetchMovies()).then(() => {
-      expect(store.getActions()).toEqual(expectedActions);
-    });
+    const expectedActions = 'Last Jedi';
+    const movies = await actions.fetchMovies(dispatch);
+    expect(movies.data.results[0].name).toBe(expectedActions);
+
     done();
   });
 
   it('creates SET_CHARACTER_SUCCESS when fetching characters has been done', async done => {
-    const expectedActions = [
-      {
-        type: types.SET_CHARACTERS_LOADING,
-        isLoading: true
-      },
-      {
-        type: types.SET_CHARACTERS_SUCCESS,
-        characters: [
-          {
-            name: 'John',
-            gender: 'M',
-            height: 250
-          }
-        ],
-        gender: [
-          {
-            name: 'Male',
-            value: 'M'
-          }
-        ]
-      },
-      {
-        type: types.SET_CHARACTERS_LOADING,
-        isLoading: false
-      }
-    ];
-
-    const store = mockStore({
-      homeReducer: {
-        characters: [],
-        movies: [{ episode_id: 2, characters: ['/people/2'] }],
-        isCLoading: false,
-        isMLoading: false,
-        error: ''
-      }
-    });
+    const expectedActions = {
+      name: 'John',
+      gender: 'M',
+      height: 250
+    };
 
     const id = '2';
 
-    await store.dispatch(actions.fetchCharacters(id)).then(() => {
-      expect(store.getActions()).toEqual(expectedActions);
-    });
+    const moviesItems = [{ episode_id: 2, characters: ['/people/2'] }];
+    const characters = await actions.fetchCharacters.process(
+      dispatch,
+      id,
+      moviesItems
+    );
+    expect(characters[0]).toEqual(expectedActions);
+
     done();
   });
 });

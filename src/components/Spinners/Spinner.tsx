@@ -1,11 +1,12 @@
 import React from 'react';
+import { Loader } from './Loader';
 import './Spinner.scss';
 
 const Spinner: React.FC = props => {
   return (
     <>
       <div className="spinner-area">
-        <div className="loader"></div>
+        <Loader className="loader"></Loader>
       </div>
     </>
   );

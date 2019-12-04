@@ -12,13 +12,14 @@ interface IProps {
   onchange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   value: string;
   options: { value: string; name: string }[];
+  name: string;
 }
 
 const SelectInput: React.FC<IProps> = (props: IProps) => {
   return (
     <React.Fragment>
       <Select value={props.value} onChange={props.onchange}>
-        <option value="">-- Please choose an option --</option>
+        <option value="">-- Please choose {props.name} --</option>
         {props.options.map((option, index) => (
           <option value={option.value} key={index}>
             {option.name}
