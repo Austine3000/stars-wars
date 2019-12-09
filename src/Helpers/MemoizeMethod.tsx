@@ -11,7 +11,6 @@ function memoize<T extends (...args: any[]) => any>(fn: T) {
       const newpromise = cache[args];
       console.log({ promise: newpromise });
       fresult = await newpromise;
-      console.log(fresult);
       return fresult;
     }
     cache[args] = fn.apply(null, [...params]);
