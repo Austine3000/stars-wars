@@ -9,7 +9,6 @@ function memoize<T extends (...args: any[]) => any>(fn: T) {
     if (args in cache) {
       var fresult: any;
       const newpromise = cache[args];
-      console.log({ promise: newpromise });
       fresult = await newpromise;
       return fresult;
     }
