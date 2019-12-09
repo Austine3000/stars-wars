@@ -1,4 +1,4 @@
-import axios from '../../../utils/AxiosWrapper';
+import fetchApi from '../../../utils/FetchWrapper';
 import Memoize from '../../../Helpers/MemoizeMethod';
 
 import * as types from './types';
@@ -42,10 +42,12 @@ export const fetchMovies = (dispatch: any): any => {
     let isLoading = true;
     dispatch(fetchMoviesLoading(isLoading));
     try {
-      const response = await axios.get('/films/');
+      const result = await fetchApi('/films/');
+      const response = await result.json();
+
       isLoading = false;
 
-      const data = response.data.results.sort(
+      const data = response.results.sort(
         (a: any, b: any) =>
           new Date(b.release_date).getTime() -
           new Date(a.release_date).getTime()
@@ -67,20 +69,21 @@ const MemoizefetchCharacterRequest = (getMovie: any[]) => {
   return (async () => {
     const result = await Promise.all(
       getMovie[0].characters.map(async (character: any) => {
-        const response = await axios.get(`${character}`);
+        const result = await fetchApi(`${character}`);
+        const response = await result.json();
         return {
-          name: response.data.name,
+          name: response.name,
           gender:
-            response.data.gender === 'male'
+            response.gender === 'male'
               ? 'M'
-              : response.data.gender === 'female'
+              : response.gender === 'female'
               ? 'F'
-              : response.data.gender === 'hermaphrodite'
+              : response.gender === 'hermaphrodite'
               ? 'HERM'
               : 'N/A',
-          height: Number.isNaN(Number(response.data.height))
-            ? response.data.height
-            : Number(response.data.height)
+          height: Number.isNaN(Number(response.height))
+            ? response.height
+            : Number(response.height)
         };
       })
     );

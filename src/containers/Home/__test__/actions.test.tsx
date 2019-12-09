@@ -1,31 +1,34 @@
 import * as actions from '../redux/actions';
 import * as types from '../redux/types';
 
-jest.mock('../../../utils/AxiosWrapper', () => ({
-  get: jest.fn(url => {
+jest.mock('../../../utils/FetchWrapper', () =>
+  jest.fn(url => {
     let result;
+    const filmsResponse = {
+      results: [
+        {
+          name: 'Last Jedi'
+        }
+      ]
+    };
+
+    const charactersResponse = {
+      name: 'John',
+      gender: 'male',
+      height: 250
+    };
     if (url === '/films/') {
-      result = {
-        data: {
-          results: [
-            {
-              name: 'Last Jedi'
-            }
-          ]
-        }
-      };
+      result = Promise.resolve({
+        json: () => Promise.resolve(filmsResponse)
+      });
     } else if (url === '/people/2') {
-      result = {
-        data: {
-          name: 'John',
-          gender: 'male',
-          height: 250
-        }
-      };
+      result = Promise.resolve({
+        json: () => Promise.resolve(charactersResponse)
+      });
     }
     return result;
   })
-}));
+);
 
 const dispatch = jest.fn();
 
@@ -103,7 +106,7 @@ describe('Home actions', () => {
   it('creates SET_MOVIES_SUCCESS when fetching movies has been done', async done => {
     const expectedActions = 'Last Jedi';
     const movies = await actions.fetchMovies(dispatch);
-    expect(movies.data.results[0].name).toBe(expectedActions);
+    expect(movies.results[0].name).toBe(expectedActions);
 
     done();
   });
