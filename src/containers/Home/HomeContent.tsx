@@ -15,6 +15,8 @@ interface IProps {
   options: { value: string; name: string }[];
   gender: any[];
   genderChoice: string;
+  sortName: string;
+  sortorder: string;
   handleGenderChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleMovieChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleDBClickSort: (name: string) => void;
@@ -66,7 +68,9 @@ const HomeContent: React.FC<IProps> = (props: IProps) => {
               />
               <TableWrapper
                 tHeaders={tHeaders}
+                sortName={props.sortName}
                 tData={props.characters}
+                sortorder={props.sortorder}
                 handleDBClickSort={props.handleDBClickSort}
                 height={height}
                 numberOfCharacters={numberOfCharacters}

@@ -112,6 +112,8 @@ const HomePage: React.FC = () => {
           movieChoice={movieChoice}
           options={options}
           credits={credits}
+          sortName={sortTable.sortName}
+          sortorder={sortTable.order}
           handleMovieChange={handleMovieChange}
           handleDBClickSort={handleDBClickSort}
           isMLoading={state.isMLoading}

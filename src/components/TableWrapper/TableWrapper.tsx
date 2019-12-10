@@ -7,6 +7,8 @@ interface IProps {
 
     isSortable: boolean;
   }[];
+  sortName: string;
+  sortorder: string;
   tData: any[];
   numberOfCharacters: number;
   handleDBClickSort: (name: string) => void;
@@ -53,11 +55,21 @@ const TableWrapper: React.FC<IProps> = (props: IProps) => {
             {props.tHeaders.map((tHeader, index) => (
               <th
                 key={index}
-                className="capitalize sort-icon "
+                className={`capitalize sort-icon ${
+                  props.sortName === tHeader.name ? 'underline' : ''
+                }`}
                 onClick={() => props.handleDBClickSort(tHeader.name)}
               >
                 {tHeader.name}{' '}
-                {tHeader.isSortable ? <i className="fas fa-sort"></i> : ''}
+                {props.sortName === tHeader.name &&
+                props.sortorder === 'asc' ? (
+                  <i className="fas fa-caret-up"></i>
+                ) : props.sortName === tHeader.name &&
+                  props.sortorder === 'desc' ? (
+                  <i className="fas fa-caret-down"></i>
+                ) : (
+                  <i className="fas fa-sort"></i>
+                )}
               </th>
             ))}
           </tr>
