@@ -25,10 +25,8 @@ const HomeContent: React.FC<IProps> = (props: IProps) => {
     props.characters.length > 0 ? Object.keys(props.characters[0]) : [];
 
   const tHeaders = headers.map(header => {
-    let isSortable = false;
-    if (header === 'name' || header === 'height') {
-      isSortable = true;
-    }
+    let isSortable = true;
+
     return {
       name: header,
       isSortable: isSortable
@@ -80,7 +78,7 @@ const HomeContent: React.FC<IProps> = (props: IProps) => {
         </>
       ) : (
         <LogoArea>
-          <img src="/assets/star-wars-logo-png-8.png" alt="star-wars-logo" />
+          <img src="/assets/Star_Wars_Logo.svg.png" alt="star-wars-logo" />
         </LogoArea>
       )}
     </React.Fragment>

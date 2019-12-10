@@ -40,10 +40,8 @@ const HomePage: React.FC = () => {
   const [credits, setCredits] = useState('');
   const [genderChoice, setGender] = useState('');
   const [sortTable, setSortTable] = useState({
-    name: '',
-    orderName: 'asc',
-    orderHeight: 'asc',
-    height: ''
+    order: 'asc',
+    sortName: ''
   });
 
   const handleMovieChange = (e: ChangeEvent): void => {
@@ -67,21 +65,11 @@ const HomePage: React.FC = () => {
   };
 
   const handleDBClickSort = (value: string): void => {
-    if (value === 'name') {
-      setSortTable({
-        ...sortTable,
-        orderName: sortTable.orderName === 'asc' ? 'desc' : 'asc',
-        name: value,
-        height: ''
-      });
-    } else if (value === 'height') {
-      setSortTable({
-        ...sortTable,
-        orderHeight: sortTable.orderHeight === 'asc' ? 'desc' : 'asc',
-        name: '',
-        height: value
-      });
-    }
+    setSortTable({
+      ...sortTable,
+      sortName: value,
+      order: sortTable.order === 'asc' ? 'desc' : 'asc'
+    });
   };
 
   const getAllMovies = useCallback(() => {
@@ -113,11 +101,7 @@ const HomePage: React.FC = () => {
     filteredCharacters = state.characters;
   }
 
-  const order = sortTable.name ? sortTable.orderName : sortTable.orderHeight;
-
-  filteredCharacters.sort(
-    CompareMethod(sortTable.height || sortTable.name, order)
-  );
+  filteredCharacters.sort(CompareMethod(sortTable.sortName, sortTable.order));
 
   return (
     <React.Fragment>
