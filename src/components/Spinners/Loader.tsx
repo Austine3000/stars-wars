@@ -1,7 +1,7 @@
 import styled, { keyframes } from 'styled-components';
 
 interface ITheme {
-  theme: { primaryColor: string };
+  theme: { secondaryColor: string };
 }
 
 const spin = keyframes`
@@ -14,9 +14,9 @@ const spin = keyframes`
 `;
 
 export const Loader = styled.div`
-  border: 16px solid #f3f3f3;
+  border: 16px solid #000;
   border-radius: 50%;
-  border-top: 16px solid ${({ theme }: ITheme) => theme.primaryColor};
+  border-top: 16px solid ${({ theme }: ITheme) => theme.secondaryColor};
   width: 120px;
   height: 120px;
   -webkit-animation: spin 2s linear infinite; /* Safari */

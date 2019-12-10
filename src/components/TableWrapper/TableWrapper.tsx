@@ -32,7 +32,7 @@ const TableRow: React.FC<IRowProps> = (props: IRowProps) => {
 
   return (
     <React.Fragment>
-      <tr>
+      <tr className="custom-tr">
         <td>{index + 1}</td>
 
         {rowsValues.map((value, index) => (
@@ -48,12 +48,12 @@ const TableWrapper: React.FC<IProps> = (props: IProps) => {
     <React.Fragment>
       <table className="table table-bordered">
         <thead>
-          <tr>
+          <tr className="custom-tr">
             {props.tHeaders.length > 0 ? <th>S/N</th> : ''}
             {props.tHeaders.map((tHeader, index) => (
               <th
                 key={index}
-                className="capitalize sort-icon"
+                className="capitalize sort-icon "
                 onClick={() => props.handleDBClickSort(tHeader.name)}
               >
                 {tHeader.name}{' '}
@@ -68,11 +68,11 @@ const TableWrapper: React.FC<IProps> = (props: IProps) => {
           ))}
         </tbody>
         <tfoot>
-          <tr>
-            <th>Total</th>
-            <th>{props.numberOfCharacters}</th>
-            <th></th>
-            <th>{`${props.height}cm ${tofeet(props.height)}`}</th>
+          <tr className="custom-tr">
+            <td>Total</td>
+            <td>{props.numberOfCharacters}</td>
+            <td></td>
+            <td>{`${props.height}cm ${tofeet(props.height)}`}</td>
           </tr>
         </tfoot>
       </table>
