@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
 interface ITheme {
-  theme: { primaryColor: string };
+  theme: { secondaryColor: string };
 }
 
 export const CrawlWrapper = styled.div`
   overflow: hidden;
-  color: ${({ theme }: ITheme) => theme.primaryColor};
+  color: ${({ theme }: ITheme) => theme.secondaryColor};
 `;

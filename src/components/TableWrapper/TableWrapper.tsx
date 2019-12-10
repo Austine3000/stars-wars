@@ -7,6 +7,8 @@ interface IProps {
 
     isSortable: boolean;
   }[];
+  sortName: string;
+  sortorder: string;
   tData: any[];
   numberOfCharacters: number;
   handleDBClickSort: (name: string) => void;
@@ -32,7 +34,7 @@ const TableRow: React.FC<IRowProps> = (props: IRowProps) => {
 
   return (
     <React.Fragment>
-      <tr>
+      <tr className="custom-tr">
         <td>{index + 1}</td>
 
         {rowsValues.map((value, index) => (
@@ -48,16 +50,26 @@ const TableWrapper: React.FC<IProps> = (props: IProps) => {
     <React.Fragment>
       <table className="table table-bordered">
         <thead>
-          <tr>
+          <tr className="custom-tr">
             {props.tHeaders.length > 0 ? <th>S/N</th> : ''}
             {props.tHeaders.map((tHeader, index) => (
               <th
                 key={index}
-                className="capitalize sort-icon"
+                className={`capitalize sort-icon ${
+                  props.sortName === tHeader.name ? 'underline' : ''
+                }`}
                 onClick={() => props.handleDBClickSort(tHeader.name)}
               >
                 {tHeader.name}{' '}
-                {tHeader.isSortable ? <i className="fas fa-sort"></i> : ''}
+                {props.sortName === tHeader.name &&
+                props.sortorder === 'asc' ? (
+                  <i className="fas fa-caret-up"></i>
+                ) : props.sortName === tHeader.name &&
+                  props.sortorder === 'desc' ? (
+                  <i className="fas fa-caret-down"></i>
+                ) : (
+                  <i className="fas fa-sort"></i>
+                )}
               </th>
             ))}
           </tr>
@@ -68,11 +80,11 @@ const TableWrapper: React.FC<IProps> = (props: IProps) => {
           ))}
         </tbody>
         <tfoot>
-          <tr>
-            <th>Total</th>
-            <th>{props.numberOfCharacters}</th>
-            <th></th>
-            <th>{`${props.height}cm ${tofeet(props.height)}`}</th>
+          <tr className="custom-tr">
+            <td>Total</td>
+            <td>{props.numberOfCharacters}</td>
+            <td></td>
+            <td>{`${props.height}cm ${tofeet(props.height)}`}</td>
           </tr>
         </tfoot>
       </table>

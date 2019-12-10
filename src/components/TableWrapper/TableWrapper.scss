@@ -1,3 +1,4 @@
+@import '../../index.scss';
 .table-body-scroll {
   overflow: scroll;
 }
@@ -8,4 +9,34 @@
 
 .sort-icon {
   cursor: pointer;
+}
+
+table {
+  color: $star-wars-yellow;
+}
+
+thead {
+  color: $star-wars-yellow;
+}
+
+tbody {
+  color: $star-wars-yellow;
+}
+
+tfoot {
+  color: $star-wars-yellow;
+}
+
+table .custom-tr td {
+  color: $star-wars-yellow;
+  border: 1px solid $star-wars-yellow;
+}
+
+table .custom-tr th {
+  color: $star-wars-yellow;
+  border: 1px solid $star-wars-yellow;
+}
+
+.underline {
+  text-decoration: underline;
 }

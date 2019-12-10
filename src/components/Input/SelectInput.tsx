@@ -5,7 +5,10 @@ const Select = styled.select`
   padding: 10px 100px 10px 10px;
   border-radius: 0px;
   font-weight: 600;
-  background-color: #fff;
+  margin-bottom: 10px;
+  background-color: #000;
+  color: #ffe934;
+  border-color: #ffe934;
 `;
 
 interface IProps {

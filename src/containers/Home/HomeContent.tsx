@@ -15,6 +15,8 @@ interface IProps {
   options: { value: string; name: string }[];
   gender: any[];
   genderChoice: string;
+  sortName: string;
+  sortorder: string;
   handleGenderChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleMovieChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleDBClickSort: (name: string) => void;
@@ -25,10 +27,8 @@ const HomeContent: React.FC<IProps> = (props: IProps) => {
     props.characters.length > 0 ? Object.keys(props.characters[0]) : [];
 
   const tHeaders = headers.map(header => {
-    let isSortable = false;
-    if (header === 'name' || header === 'height') {
-      isSortable = true;
-    }
+    let isSortable = true;
+
     return {
       name: header,
       isSortable: isSortable
@@ -68,7 +68,9 @@ const HomeContent: React.FC<IProps> = (props: IProps) => {
               />
               <TableWrapper
                 tHeaders={tHeaders}
+                sortName={props.sortName}
                 tData={props.characters}
+                sortorder={props.sortorder}
                 handleDBClickSort={props.handleDBClickSort}
                 height={height}
                 numberOfCharacters={numberOfCharacters}
@@ -80,7 +82,7 @@ const HomeContent: React.FC<IProps> = (props: IProps) => {
         </>
       ) : (
         <LogoArea>
-          <img src="/assets/star-wars-logo-png-8.png" alt="star-wars-logo" />
+          <img src="/assets/Star_Wars_Logo.svg.png" alt="star-wars-logo" />
         </LogoArea>
       )}
     </React.Fragment>
