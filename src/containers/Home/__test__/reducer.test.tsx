@@ -1,5 +1,5 @@
-import { HomeReducer } from '../redux/reducer';
-import * as types from '../redux/types';
+import { HomeReducer } from '../reducer';
+import * as types from '../types';
 
 describe('Home reducer', () => {
   it('shoudld return the movies success', () => {
@@ -9,8 +9,8 @@ describe('Home reducer', () => {
           characters: [],
           movies: [],
           gender: [],
-          isCLoading: false,
-          isMLoading: false,
+          isCharacterLoading: false,
+          isMovieLoading: false,
           error: ''
         },
         {
@@ -26,8 +26,8 @@ describe('Home reducer', () => {
       characters: [],
 
       gender: [],
-      isCLoading: false,
-      isMLoading: false,
+      isCharacterLoading: false,
+      isMovieLoading: false,
       error: '',
       movies: [
         {
@@ -44,8 +44,8 @@ describe('Home reducer', () => {
           characters: [],
           movies: [],
           gender: [],
-          isCLoading: false,
-          isMLoading: false,
+          isCharacterLoading: false,
+          isMovieLoading: false,
           error: ''
         },
         {
@@ -61,8 +61,8 @@ describe('Home reducer', () => {
     ).toEqual({
       movies: [],
       gender: ['male'],
-      isCLoading: false,
-      isMLoading: false,
+      isCharacterLoading: false,
+      isMovieLoading: false,
       error: '',
       characters: [
         {
@@ -79,8 +79,8 @@ describe('Home reducer', () => {
           characters: [],
           movies: [],
           gender: [],
-          isCLoading: false,
-          isMLoading: false,
+          isCharacterLoading: false,
+          isMovieLoading: false,
           error: ''
         },
         {
@@ -92,8 +92,8 @@ describe('Home reducer', () => {
       characters: [],
       movies: [],
       gender: [],
-      isCLoading: false,
-      isMLoading: true,
+      isCharacterLoading: false,
+      isMovieLoading: true,
       error: ''
     });
   });
@@ -101,14 +101,14 @@ describe('Home reducer', () => {
   it('shoudld return the characters loading', () => {
     expect(
       HomeReducer(
-        { isCLoading: false },
+        { isCharacterLoading: false },
         {
           type: types.SET_CHARACTERS_LOADING,
           isLoading: true
         }
       )
     ).toEqual({
-      isCLoading: true
+      isCharacterLoading: true
     });
   });
 

@@ -1,5 +1,6 @@
-import fetchApi from '../../../utils/FetchWrapper';
-import Memoize from '../../../Helpers/MemoizeMethod';
+import fetchApi from '../../utils/FetchWrapper';
+import Memoize from '../../Helpers/MemoizeMethod';
+import CompareMethod from '../../Helpers/CompareMethod';
 
 import * as types from './types';
 
@@ -46,12 +47,10 @@ export const fetchMovies = (dispatch: any): any => {
       const response = await result.json();
 
       isLoading = false;
-
-      const data = response.results.sort(
-        (a: any, b: any) =>
-          new Date(b.release_date).getTime() -
-          new Date(a.release_date).getTime()
+      const data = [...response.results].sort(
+        CompareMethod('release_date', 'asc')
       );
+      console.log('data', data);
       dispatch(fetchMoviesSuccess(data));
       dispatch(fetchMoviesLoading(isLoading));
       return response;
@@ -65,10 +64,10 @@ export const fetchMovies = (dispatch: any): any => {
   })();
 };
 
-const MemoizefetchCharacterRequest = (getMovie: any[]) => {
+const fetchCharacterRequest = (movie: { characters: string[] }) => {
   return (async () => {
     const result = await Promise.all(
-      getMovie[0].characters.map(async (character: any) => {
+      movie.characters.map(async (character: any) => {
         const result = await fetchApi(`${character}`);
         const response = await result.json();
         return {
@@ -91,25 +90,19 @@ const MemoizefetchCharacterRequest = (getMovie: any[]) => {
   })();
 };
 
-export const fetchCharacterRequest = Memoize(MemoizefetchCharacterRequest);
+export const CharacterRequest = Memoize(fetchCharacterRequest);
 
 // Api call to get all characters
 export const fetchCharacters = (
   dispatch: any,
-  id: string,
-  movies: any[]
+  movie: { characters: string[] }
 ): any => {
   return (async () => {
     let isLoading = true;
-    const episode = Number(id);
-    const moviesList: any[] = movies;
-    const getMovie = moviesList.filter((item: any) => {
-      return item.episode_id === episode;
-    });
 
     dispatch(fetchCharactersLoading(isLoading));
     try {
-      const result: any = await fetchCharacterRequest(getMovie);
+      const result: any = await CharacterRequest(movie);
 
       isLoading = false;
       let gender = Array.from(new Set(result.map((x: any) => x.gender)));

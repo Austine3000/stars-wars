@@ -10,8 +10,8 @@ import {
 export interface IMovies {
   characters: any[];
   movies: any[];
-  isCLoading: boolean;
-  isMLoading: boolean;
+  isCharacterLoading: boolean;
+  isMovieLoading: boolean;
   gender: any[];
   error: string;
 }
@@ -19,8 +19,8 @@ export interface IMovies {
 const initialState: IMovies = {
   characters: [],
   movies: [],
-  isCLoading: false,
-  isMLoading: false,
+  isCharacterLoading: false,
+  isMovieLoading: false,
   gender: [],
   error: ''
 };
@@ -36,7 +36,7 @@ export function HomeReducer(state: IMovies, action: any) {
     case SET_CHARACTERS_LOADING:
       return {
         ...state,
-        isCLoading: action.isLoading
+        isCharacterLoading: action.isLoading
       };
     case SET_CHARACTERS_ERROR:
       return {
@@ -51,7 +51,7 @@ export function HomeReducer(state: IMovies, action: any) {
     case SET_MOVIES_LOADING:
       return {
         ...state,
-        isMLoading: action.isLoading
+        isMovieLoading: action.isLoading
       };
     case SET_MOVIES_ERROR:
       return {

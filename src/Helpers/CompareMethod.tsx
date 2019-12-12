@@ -4,8 +4,19 @@ const compareValues = (key: string, order = 'asc') => (a: any, b: any) => {
     return 0;
   }
 
-  const varA = typeof a[key] === 'string' ? a[key].toUpperCase() : a[key];
-  const varB = typeof b[key] === 'string' ? b[key].toUpperCase() : b[key];
+  const varA =
+    typeof a[key] === 'string'
+      ? a[key].toUpperCase()
+      : typeof a[key].getMonth === 'function'
+      ? new Date(a[key]).getTime()
+      : a[key];
+
+  const varB =
+    typeof b[key] === 'string'
+      ? b[key].toUpperCase()
+      : typeof b[key].getMonth === 'function'
+      ? new Date(b[key]).getTime()
+      : b[key];
 
   let comparison = 0;
   if (varA > varB) {

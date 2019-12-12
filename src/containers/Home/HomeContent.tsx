@@ -8,8 +8,8 @@ import './Home.scss';
 
 interface IProps {
   characters: any[];
-  isCLoading: boolean;
-  isMLoading: boolean;
+  isCharacterLoading: boolean;
+  isMovieLoading: boolean;
   movieChoice: string;
   credits: string;
   options: { value: string; name: string }[];
@@ -25,9 +25,10 @@ interface IProps {
 const HomeContent: React.FC<IProps> = (props: IProps) => {
   const headers =
     props.characters.length > 0 ? Object.keys(props.characters[0]) : [];
+  const numberOfCharacters = props.characters.length;
 
   const tHeaders = headers.map(header => {
-    let isSortable = true;
+    const isSortable = true;
 
     return {
       name: header,
@@ -35,15 +36,12 @@ const HomeContent: React.FC<IProps> = (props: IProps) => {
     };
   });
 
-  let height = 0;
-  let numberOfCharacters = 0;
-
-  props.characters.forEach(element => {
-    if (Number(element.height) >= 0) {
-      height = height + Number(element.height);
+  const height = props.characters.reduce((accumulator, currentValue) => {
+    if (Number(currentValue.height) >= 0) {
+      return accumulator + Number(currentValue.height);
     }
-    numberOfCharacters = numberOfCharacters + 1;
-  });
+    return accumulator + 0;
+  }, 0);
 
   return (
     <React.Fragment>
@@ -58,7 +56,7 @@ const HomeContent: React.FC<IProps> = (props: IProps) => {
       {props.credits !== '' ? (
         <>
           <Crawl credits={props.credits} />
-          {!props.isCLoading ? (
+          {!props.isCharacterLoading ? (
             <div className="table-area">
               <SelectInput
                 options={props.gender}

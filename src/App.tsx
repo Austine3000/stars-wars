@@ -5,7 +5,7 @@ import { GlobalStyles } from './utils/global';
 
 import ErrorBoundary from './common/ErrorBoundary';
 
-const HomePage = React.lazy(() => import('./containers/Home/HomePage'));
+import HomePage from './containers/Home/HomePage';
 
 const App: React.FC = () => {
   return (
