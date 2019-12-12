@@ -1,5 +1,5 @@
-import * as actions from '../redux/actions';
-import * as types from '../redux/types';
+import * as actions from '../actions';
+import * as types from '../types';
 
 jest.mock('../../../utils/FetchWrapper', () =>
   jest.fn(url => {
@@ -118,10 +118,8 @@ describe('Home actions', () => {
       height: 250
     };
 
-    const id = '2';
-
-    const moviesItems = [{ episode_id: 2, characters: ['/people/2'] }];
-    const characters = await actions.fetchCharacters(dispatch, id, moviesItems);
+    const movie = { characters: ['/people/2'] };
+    const characters = await actions.fetchCharacters(dispatch, movie);
     expect(characters[0]).toEqual(expectedActions);
 
     done();

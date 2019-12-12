@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Movie, { IMovies } from '../containers/Home/redux/reducer';
+import Movie, { IMovies } from '../containers/Home/reducer';
 
 interface IContextProps {
   movies: IMovies;

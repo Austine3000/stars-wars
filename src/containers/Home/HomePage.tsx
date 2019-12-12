@@ -1,25 +1,19 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Store } from '../../store/configureStore';
-import { fetchMovies, fetchCharacters } from './redux/actions';
+import { fetchMovies, fetchCharacters } from './actions';
 import { toast } from 'react-toastify';
 import Spinner from '../../components/Spinners/Spinner';
 import CompareMethod from '../../Helpers/CompareMethod';
 
-const HomeContent = React.lazy(() => import('./HomeContent'));
+import HomeContent from './HomeContent';
 
 type ChangeEvent = React.ChangeEvent<HTMLSelectElement>;
-type MouseEvent = React.MouseEventHandler<HTMLElement>;
-
-interface Imovie {
-  title: string;
-  episode_id: Number;
-}
 
 interface IState {
   characters: any[];
   movies: any[];
-  isCLoading: boolean;
-  isMLoading: boolean;
+  isCharacterLoading: boolean;
+  isMovieLoading: boolean;
   gender: any[];
   error: string;
 }
@@ -30,8 +24,8 @@ const HomePage: React.FC = () => {
   const state: IState = {
     characters: movies.characters,
     movies: movies.movies,
-    isCLoading: movies.isCLoading,
-    isMLoading: movies.isMLoading,
+    isCharacterLoading: movies.isCharacterLoading,
+    isMovieLoading: movies.isMovieLoading,
     gender: movies.gender,
     error: movies.error
   };
@@ -44,16 +38,22 @@ const HomePage: React.FC = () => {
     sortName: ''
   });
 
+  useEffect(() => {
+    fetchMovies(dispatch);
+  }, [dispatch]);
+
   const handleMovieChange = (e: ChangeEvent): void => {
     const { value } = e.target;
     setMovieChoice(value);
     if (value !== '') {
-      fetchCharacters(dispatch, value, state.movies);
-      let credits = state.movies.find(item => {
+      setGender('');
+      const movie = state.movies.find(item => {
         return item.episode_id === Number(value);
       });
 
-      setCredits(credits.opening_crawl);
+      fetchCharacters(dispatch, movie);
+
+      setCredits(movie.opening_crawl);
     } else {
       setCredits('');
     }
@@ -71,14 +71,6 @@ const HomePage: React.FC = () => {
       order: sortTable.order === 'asc' ? 'desc' : 'asc'
     });
   };
-
-  const getAllMovies = useCallback(() => {
-    fetchMovies(dispatch);
-  }, [dispatch]);
-
-  useEffect(() => {
-    getAllMovies();
-  }, [getAllMovies]);
 
   const options = state.movies.map(movie => {
     var items = {
@@ -98,7 +90,7 @@ const HomePage: React.FC = () => {
       return element.gender === genderChoice;
     });
   } else {
-    filteredCharacters = state.characters;
+    filteredCharacters = [...state.characters];
   }
 
   filteredCharacters.sort(CompareMethod(sortTable.sortName, sortTable.order));
@@ -108,7 +100,7 @@ const HomePage: React.FC = () => {
       <React.Suspense fallback={<Spinner />}>
         <HomeContent
           characters={filteredCharacters}
-          isCLoading={state.isCLoading}
+          isCharacterLoading={state.isCharacterLoading}
           movieChoice={movieChoice}
           options={options}
           credits={credits}
@@ -116,7 +108,7 @@ const HomePage: React.FC = () => {
           sortorder={sortTable.order}
           handleMovieChange={handleMovieChange}
           handleDBClickSort={handleDBClickSort}
-          isMLoading={state.isMLoading}
+          isMovieLoading={state.isMovieLoading}
           gender={state.gender}
           genderChoice={genderChoice}
           handleGenderChange={handleGenderChange}

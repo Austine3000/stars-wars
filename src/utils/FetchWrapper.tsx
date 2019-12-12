@@ -1,5 +1,3 @@
-import fetch from 'node-fetch';
-
 function fetchAbsolute(fetch: any) {
   return (baseUrl: any) => (url: string, ...otherParams: any) =>
     url.startsWith('/')

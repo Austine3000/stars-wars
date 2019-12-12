@@ -11,8 +11,8 @@ const value = {
     movies: [{}],
     characters: [],
     gender: [],
-    isCLoading: false,
-    isMLoading: false,
+    isCharacterLoading: false,
+    isMovieLoading: false,
     error: ''
   }
 };
